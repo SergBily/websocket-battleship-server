@@ -4,6 +4,7 @@ import path from 'path';
 import { readFile } from 'fs';
 import dotenv from 'dotenv';
 import { decodedMessage } from './middleware/decodedMessage';
+import { router } from './router/router';
 
 dotenv.config();
 const DEFAULT_PORT = 8181;
@@ -34,5 +35,6 @@ wsServer.on('connection', (ws: WebSocket) => {
   console.log('ws start');
   ws.on('message', (data: WebSocket.RawData) => {
     const { type, payload } = decodedMessage(data);
+    router(type, payload);
   });
 });
