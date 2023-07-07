@@ -3,8 +3,8 @@ import http from 'http';
 import path from 'path';
 import { readFile } from 'fs';
 import dotenv from 'dotenv';
-import { decodedMessage } from './middleware/decodedMessage';
-import { router } from './router/router';
+import { printMessage } from './utils/printMessage';
+import { handlerConnection } from './common/handlerConnection';
 
 dotenv.config();
 const DEFAULT_PORT = 8181;
@@ -26,15 +26,14 @@ const httpServer = http.createServer((req, res) => {
 });
 
 httpServer.listen(port, () => {
-  console.log(`Start static http server on the ${port} port!`);
+  printMessage<string>(`Start static http server on the ${port} port!`);
 });
 
 const wsServer = new WebSocket.Server({ port: 3000 });
 
 wsServer.on('connection', (ws: WebSocket) => {
-  console.log('ws start');
-  ws.on('message', (data: WebSocket.RawData) => {
-    const { type, payload } = decodedMessage(data);
-    router(type, payload);
-  });
+  printMessage<string>('ws start');
+  ws.on('message', handlerConnection.message.bind(null, ws))
+    .on('error', handlerConnection.error)
+    .on('close', handlerConnection.close);
 });

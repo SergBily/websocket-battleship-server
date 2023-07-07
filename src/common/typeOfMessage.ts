@@ -1,4 +1,4 @@
-import { userController } from '../controller/userController';
+import { userController } from '../controllers/userController';
 import { TypesMessages } from '../models/interfaces/typesMessages.interface';
 
 export const typeOfMessage: TypesMessages = {

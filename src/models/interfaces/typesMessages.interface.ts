@@ -1,3 +1,5 @@
+import { WebSocket } from 'ws';
+
 export interface TypesMessages {
-  reg: (data: string) => void
+  reg: (data: string, ws: WebSocket) => void
 }
