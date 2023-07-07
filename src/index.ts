@@ -3,6 +3,7 @@ import http from 'http';
 import path from 'path';
 import { readFile } from 'fs';
 import dotenv from 'dotenv';
+import { decodedMessage } from './middleware/decodedMessage';
 
 dotenv.config();
 const DEFAULT_PORT = 8181;
@@ -31,4 +32,7 @@ const wsServer = new WebSocket.Server({ port: 3000 });
 
 wsServer.on('connection', (ws: WebSocket) => {
   console.log('ws start');
+  ws.on('message', (data: WebSocket.RawData) => {
+    const { type, payload } = decodedMessage(data);
+  });
 });
