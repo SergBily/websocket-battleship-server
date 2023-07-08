@@ -1,4 +1,4 @@
-import { UserDatabase } from './User.interface';
+import { UserDatabase } from './user.interface';
 
 export interface Database {
   reg: UserDatabase[]

@@ -1,6 +1,6 @@
-import { dataBase } from '../models/db';
-import { User, UserDatabase } from '../models/interfaces/User.interface';
-import { ResponseRegData } from '../models/interfaces/responseReg.interface';
+import { dataBase } from '../data-access/database';
+import { User, UserDatabase } from './interfaces/user.interface';
+import { ResponseRegData } from './interfaces/response-reg.interface';
 
 class UserService {
   async login(userData: User): Promise<ResponseRegData> {

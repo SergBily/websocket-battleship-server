@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { decodedMessage } from '../middlewares/decodedMessage';
+import { decodedMessage } from './decoded-message';
 import { router } from '../router/router';
 
 class HandlerConnection {
@@ -7,8 +7,8 @@ class HandlerConnection {
     console.log('user disconnected');
   }
 
-  public error(err: Error) {
-    console.log(err, 'err');
+  public error(error: Error) {
+    console.log(error, 'err');
   }
 
   public message(ws: WebSocket, data: WebSocket.RawData) {

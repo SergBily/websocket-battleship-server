@@ -1,5 +1,5 @@
-import { UserDatabase } from './interfaces/User.interface';
-import { Database } from './interfaces/database.interface';
+import { UserDatabase } from '../domain/interfaces/user.interface';
+import { Database } from '../domain/interfaces/database.interface';
 
 class DataBase {
   private db: Database = {
