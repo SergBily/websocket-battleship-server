@@ -3,11 +3,10 @@ import { User, UserDatabase } from './interfaces/user.interface';
 import { ResponseRegData } from './interfaces/response-reg.interface';
 
 class UserService {
-  async login(userData: User): Promise<ResponseRegData> {
+  async login(userData: User): Promise<UserDatabase> {
     const count: number = dataBase.getCountUsers();
     dataBase.createUser({ index: count, ...userData });
-    const createdUser = dataBase.getUser(count) as UserDatabase;
-    return { ...createdUser, error: false, errorText: '' };
+    return dataBase.getUser(count) as UserDatabase;
   }
 }
 
