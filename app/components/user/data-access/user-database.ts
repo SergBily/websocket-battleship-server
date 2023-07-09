@@ -1,12 +1,12 @@
-import { UserDatabase } from '../domain/interfaces/user.interface';
+import { UserDatabase as User } from '../domain/interfaces/user.interface';
 import { Database } from '../domain/interfaces/database.interface';
 
-class DataBase {
+class UserDatabase {
   private db: Database = {
     reg: [],
   };
 
-  public createUser(userData: UserDatabase): void {
+  public createUser(userData: User): void {
     this.db.reg.push(userData);
   }
 
@@ -14,9 +14,9 @@ class DataBase {
     return this.db.reg.length;
   }
 
-  public getUser(index: number) {
+  public getUser(index: number): User | undefined {
     return this.db.reg.find((user) => user.index === index);
   }
 }
 
-export const dataBase = new DataBase();
+export const userDatabase = new UserDatabase();
