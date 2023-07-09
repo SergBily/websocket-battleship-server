@@ -11,9 +11,9 @@ class HandlerConnection {
     console.log(error, 'err');
   }
 
-  public message(ws: WebSocket, data: WebSocket.RawData) {
+  public message(idClient: number, data: WebSocket.RawData) {
     const { type, payload } = decodedMessage(data);
-    router(type, payload, ws);
+    router(type, payload, idClient);
   }
 }
 

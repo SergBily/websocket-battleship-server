@@ -1,3 +1,3 @@
-import { TypesMessages } from '../../../components/user/domain/interfaces/types-messages.interface';
+import { TypesMessages } from '../interfaces/types-messages.interface';
 
 export type KeysOfTypesMessages = keyof TypesMessages;
