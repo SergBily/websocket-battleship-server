@@ -1,13 +1,20 @@
-import { clients } from '../../../libraries/common/clients';
+import { jsonConverter } from '../../../libraries/utils/json-converter';
+import { RequestAddRoom } from '../domain/interfaces/request-add-room.interface';
 import { roomService } from '../domain/room-service';
+import { sendMessagePlayers } from './message-sender';
 
 class RoomController {
   public async create(_data: string, idClient: number): Promise<void> {
-    const rooms: string = await roomService.create(idClient - 1);
+    await roomService.create(idClient);
+    const messageUpdateRooms = await roomService.getUpdateRoomsMwssages();
+    sendMessagePlayers(messageUpdateRooms);
+  }
 
-    for (const client of Object.values(clients)) {
-      client.send(rooms);
-    }
+  public async addToRoom(data: string, idClient: number): Promise<void> {
+    const roomId: RequestAddRoom = jsonConverter(data);
+    const addRoom = await roomService.addToRoom(roomId.indexRoom, idClient);
+    const messageUpdateRooms = await roomService.getUpdateRoomsMwssages();
+    sendMessagePlayers(messageUpdateRooms);
   }
 }
 

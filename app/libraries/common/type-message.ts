@@ -5,4 +5,5 @@ import { roomController } from '../../components/room/entry-points/room-controll
 export const typeOfMessage: TypesMessages = {
   reg: userController.login,
   create_room: roomController.create,
+  add_user_to_room: roomController.addToRoom,
 };

@@ -29,6 +29,21 @@ class RoomDatabase {
     }
     return !!user;
   }
+
+  public getRoom(roomId: number): Room | undefined {
+    return this.db.rooms.find((room) => room.roomId === roomId);
+  }
+
+  public addPlayerToRoom(roomId: number, user: RoomUsers): Room {
+    let updatedRoom!: Room;
+    for (const room of this.db.rooms) {
+      if (room.roomId === roomId) {
+        room.roomUsers.push(user);
+        updatedRoom = room;
+      }
+    }
+    return updatedRoom;
+  }
 }
 
 export const roomDatabase = new RoomDatabase();
