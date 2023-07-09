@@ -5,6 +5,7 @@ import { readFile } from 'node:fs';
 import dotenv from 'dotenv';
 import { printMessage } from './libraries/utils/print-message';
 import { handlerConnection } from './libraries/common/handler-connection';
+import { clients } from './libraries/common/clients';
 
 dotenv.config();
 const DEFAULT_PORT = 8181;
@@ -31,9 +32,13 @@ httpServer.listen(port, () => {
 
 const wsServer = new WebSocket.Server({ port: 3000 });
 
+let countClients = 0;
+
 wsServer.on('connection', (ws: WebSocket) => {
   printMessage<string>('ws start');
-  ws.on('message', handlerConnection.message.bind(undefined, ws))
+  clients[`${countClients}`] = ws;
+  countClients += 1;
+  ws.on('message', handlerConnection.message.bind(undefined, countClients))
     .on('error', handlerConnection.error)
     .on('close', handlerConnection.close);
 });
