@@ -21,7 +21,7 @@ class UserController {
     const decodedMessage = jsonConverter<StructureMessage>(messageClient);
 
     printMessage<StructureMessage>(messageClient);
-    const currentClient = clients[`${idClient - 1}`];
+    const currentClient = clients[`${idClient}`];
     currentClient.send(decodedMessage);
     currentClient.send(roomsMessage);
   }

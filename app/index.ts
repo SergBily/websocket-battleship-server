@@ -38,7 +38,7 @@ wsServer.on('connection', (ws: WebSocket) => {
   printMessage<string>('ws start');
   clients[`${countClients}`] = ws;
   countClients += 1;
-  ws.on('message', handlerConnection.message.bind(undefined, countClients))
+  ws.on('message', handlerConnection.message.bind(undefined, countClients - 1))
     .on('error', handlerConnection.error)
     .on('close', handlerConnection.close);
 });
