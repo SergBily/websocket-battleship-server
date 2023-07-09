@@ -2,12 +2,11 @@ import { userDatabase } from '../../user/data-access/user-database';
 import { UserDatabase } from '../../user/domain/interfaces/user.interface';
 import { roomDatabase } from '../data-access/room-database';
 import { dataService } from './data-service';
-import { ResponseUpdate } from './interfaces/response-update.interface';
 import { Room } from './interfaces/room.interface';
-import { messagesService } from './messages-service';
+import { messagesGenerator } from '../../../libraries/common/messages-generator';
 
 class RoomService {
-  public async create(idClient: number): Promise<ResponseUpdate> {
+  public async create(idClient: number): Promise<string> {
     const user: UserDatabase | undefined = userDatabase.getUser(idClient);
 
     if (user) {
@@ -19,7 +18,7 @@ class RoomService {
       }
     }
     const allRoomWithOnePlayer = roomDatabase.getRoomsWithOnePlayer();
-    return messagesService.createUpdateRoomMessage(allRoomWithOnePlayer);
+    return messagesGenerator.createUpdateRoomMessage(allRoomWithOnePlayer);
   }
 }
 
