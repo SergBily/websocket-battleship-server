@@ -4,9 +4,11 @@ import { roomDatabase } from '../data-access/room-database';
 import { dataService } from './data-service';
 import { Room } from './interfaces/room.interface';
 import { messagesGenerator } from '../../../libraries/common/messages-generator';
+import { TypeMessages } from '../../../libraries/models/enums/type-messages.enum';
+import { ResponseDataMessage } from './interfaces/response-data-message.interface';
 
 class RoomService {
-  public async create(idClient: number): Promise<void> {
+  public async createRoom(idClient: number): Promise<void> {
     const user: UserDatabase | undefined = userDatabase.getUser(idClient);
 
     if (user) {
@@ -19,7 +21,7 @@ class RoomService {
     }
   }
 
-  public async addToRoom(roomId: number, idClient: number): Promise<void> {
+  public async addPlayerToRoom(roomId: number, idClient: number): Promise<Room> {
     let currentRoom: Room | undefined = roomDatabase.getRoom(roomId);
     const user: UserDatabase | undefined = userDatabase.getUser(idClient);
 
@@ -29,11 +31,19 @@ class RoomService {
         { name: user.name, index: user.index },
       );
     }
+    return currentRoom as Room;
   }
 
-  public async getUpdateRoomsMwssages(): Promise<string> {
+  public async getUpdateRoomsMessages(): Promise<string> {
     const allRoomWithOnePlayer = roomDatabase.getRoomsWithOnePlayer();
-    return messagesGenerator.createUpdateRoomMessage(allRoomWithOnePlayer);
+    return messagesGenerator.generateMessage(allRoomWithOnePlayer, TypeMessages.update_room);
+  }
+
+  public async getcreateGameMessages(idGame: number): Promise<string> {
+    return messagesGenerator.generateMessage<ResponseDataMessage>(
+      { idGame },
+      TypeMessages.create_game,
+    );
   }
 }
 
