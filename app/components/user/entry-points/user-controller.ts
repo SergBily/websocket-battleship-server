@@ -12,7 +12,7 @@ import { clients } from '../../../libraries/common/clients';
 class UserController {
   async login(payload: string, idClient: number) {
     const decodedPayload: User = jsonConverter(payload);
-    const { user, roomsMessage } = await userService.login(decodedPayload);
+    const { user, roomsMessage } = await userService.login(decodedPayload, idClient);
     const userDto: ResponseRegData = new UserDto(user);
     const messageClient: StructureMessage = createSendMessage(
       TypeMessages.reg,

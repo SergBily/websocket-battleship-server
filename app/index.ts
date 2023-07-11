@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { printMessage } from './libraries/utils/print-message';
 import { handlerConnection } from './libraries/common/handler-connection';
 import { clients } from './libraries/common/clients';
+import { createNumberClient } from './libraries/utils/create-number-client';
 
 dotenv.config();
 const DEFAULT_PORT = 8181;
@@ -32,13 +33,12 @@ httpServer.listen(port, () => {
 
 const wsServer = new WebSocket.Server({ port: 3000 });
 
-let countClients = 0;
-
 wsServer.on('connection', (ws: WebSocket) => {
   printMessage<string>('ws start');
-  clients[`${countClients}`] = ws;
-  countClients += 1;
-  ws.on('message', handlerConnection.message.bind(undefined, countClients - 1))
+  const numberClient = createNumberClient();
+
+  clients[`${numberClient}`] = ws;
+  ws.on('message', handlerConnection.message.bind(undefined, numberClient))
     .on('error', handlerConnection.error)
     .on('close', handlerConnection.close);
 });
