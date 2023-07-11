@@ -21,7 +21,7 @@ class RoomService {
     }
   }
 
-  public async addPlayerToRoom(roomId: number, idClient: number): Promise<Room> {
+  public async addPlayerToRoom(roomId: number, idClient: number): Promise<Room | undefined> {
     let currentRoom: Room | undefined = roomDatabase.getRoom(roomId);
     const user: UserDatabase | undefined = userDatabase.getUser(idClient);
 
@@ -30,8 +30,9 @@ class RoomService {
         roomId,
         { name: user.name, index: user.index },
       );
+      return currentRoom as Room;
     }
-    return currentRoom as Room;
+    return undefined;
   }
 
   public async getUpdateRoomsMessages(): Promise<string> {

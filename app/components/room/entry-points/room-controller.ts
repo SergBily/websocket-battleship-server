@@ -15,12 +15,17 @@ class RoomController {
 
   public async addToRoom(data: string, idClient: number): Promise<void> {
     const roomId: RequestAddRoom = jsonConverter(data);
-    const roomForGame: Room = await roomService.addPlayerToRoom(roomId.indexRoom, idClient);
-    const messageUpdateRooms: string = await roomService.getUpdateRoomsMessages();
-    const messageCreateGame: string = await roomService.getcreateGameMessages(idClient);
-    sendMessagePlayers(messageUpdateRooms);
-    sendMessageGamePlayers(messageCreateGame, roomForGame.roomUsers);
-    printMessage(messageCreateGame);
+    const roomForGame: Room | undefined = await roomService.addPlayerToRoom(
+      roomId.indexRoom,
+      idClient,
+    );
+    if (roomForGame) {
+      const messageUpdateRooms: string = await roomService.getUpdateRoomsMessages();
+      const messageCreateGame: string = await roomService.getcreateGameMessages(idClient);
+      sendMessagePlayers(messageUpdateRooms);
+      sendMessageGamePlayers(messageCreateGame, roomForGame.roomUsers);
+      printMessage(messageCreateGame);
+    }
   }
 }
 
