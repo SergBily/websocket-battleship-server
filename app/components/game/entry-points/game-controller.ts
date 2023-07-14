@@ -1,14 +1,18 @@
+import { jsonConverter } from '../../../libraries/utils/json-converter';
+import { gameService } from '../domain/game-service';
 import { ShipsData } from '../domain/interfaces/ships-data.interface';
 
 class GameController {
-  public async addShips(data: string, idClient: number) {
-    // console.log( idClient, 1);
-    const bb: ShipsData = JSON.parse(data);
-    console.log(bb);
+  public async addShips(data: string, idClient: number): Promise<void> {
+    const gameBoard: ShipsData = jsonConverter(data);
+    const bb = await gameService.addShips(gameBoard, idClient);
+    console.log(bb.players);
 
-    for (const ship of bb.ships) {
-      console.log(ship.position);
-    }
+    // console.log(gameBoard, 1);
+
+    // for (const ship of gameBoard.ships) {
+    //   console.log(ship.position);
+    // }
   }
 }
 

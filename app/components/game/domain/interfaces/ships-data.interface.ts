@@ -3,7 +3,7 @@ export interface ShipsData {
   ships: Ships[];
 }
 
-interface Ships {
+export interface Ships {
   position: Position;
   direction: boolean;
   length: number;
