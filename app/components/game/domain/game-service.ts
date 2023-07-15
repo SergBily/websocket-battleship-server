@@ -1,14 +1,15 @@
 import { gameDatabase } from '../data-access/game-database';
 import { createPositionsShip } from './create-positions-ship';
 import { CoordinateShips } from './interfaces/coordinate-ship.interface';
-import { Game } from './interfaces/game-database.interface';
+import { Players } from './interfaces/game-database.interface';
 import { ShipsData } from './interfaces/ships-data.interface';
 
 class GameService {
-  public async addShips(gameBoard: ShipsData, idClient: number): Promise<Game> {
+  public async addShips(gameBoard: ShipsData, idClient: number): Promise<Players[] | undefined> {
     const filledBoard: CoordinateShips = createPositionsShip(gameBoard.ships);
-    const createdGame = gameDatabase.createGame(gameBoard.gameId, filledBoard, idClient);
-    return createdGame;
+    gameDatabase.createGame(gameBoard.gameId, filledBoard, idClient);
+    const room: Players[] | undefined = gameDatabase.addMessageGame(gameBoard, idClient);
+    return room;
   }
 }
 
