@@ -10,6 +10,7 @@ export interface GameDatabase {
 export interface Game {
   gameId: number;
   players: PlayerGame[];
+  currentPlayer: number
 }
 
 interface PlayerGame {

@@ -51,8 +51,17 @@ class GameDatabase {
     const newGame: Game = {
       gameId,
       players: [{ indexPlayer, ships }],
+      currentPlayer: indexPlayer,
     };
     this.db.games.push(newGame);
+  }
+
+  public getCurrentPlayerGame(gameId: number): number {
+    const game: Game | undefined = this.db.games.find((g) => g.gameId === gameId);
+    if (game) {
+      return game.currentPlayer;
+    }
+    return 0;
   }
 }
 

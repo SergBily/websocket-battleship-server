@@ -11,12 +11,19 @@ class GameController {
   public async addShips(data: string, idClient: number): Promise<void> {
     const gameBoard: ShipsData = jsonConverter(data);
     const room: Players[] | undefined = await gameService.addShips(gameBoard, idClient);
+    const currentPlayer: number = await gameService.getPlayerGoes(gameBoard.gameId);
 
     if (room) {
       for (const player of room) {
         const message: string = messagesGenerator.generateMessage(player, TypeMessages.start_game);
+        const messageTurn: string = messagesGenerator.generateMessage(
+          { currentPlayer },
+          TypeMessages.turn,
+        );
         clients[`${player.currentPlayerIndex}`].send(message);
+        clients[`${player.currentPlayerIndex}`].send(messageTurn);
         printMessage(message);
+        printMessage(messageTurn);
       }
     }
   }

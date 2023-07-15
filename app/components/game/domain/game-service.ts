@@ -11,6 +11,10 @@ class GameService {
     const room: Players[] | undefined = gameDatabase.addMessageGame(gameBoard, idClient);
     return room;
   }
+
+  public async getPlayerGoes(gameId: number): Promise<number> {
+    return gameDatabase.getCurrentPlayerGame(gameId);
+  }
 }
 
 export const gameService = new GameService();
