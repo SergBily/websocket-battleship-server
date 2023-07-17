@@ -1,6 +1,7 @@
-import { CoordinateShips } from '../domain/interfaces/coordinate-ship.interface';
+import { Attack } from '../domain/interfaces/attack.interface';
+import { CoordinateAttack, CoordinateShips, Coordinates } from '../domain/interfaces/coordinate-ship.interface';
 import {
-  GameDatabase as Database, Game, GameMessage, Players,
+  GameDatabase as Database, Game, GameMessage, PlayerGame, Players,
 } from '../domain/interfaces/game-database.interface';
 import { ShipsData } from '../domain/interfaces/ships-data.interface';
 
@@ -10,7 +11,11 @@ class GameDatabase {
     gamesMessage: [],
   };
 
-  public createGame(gameId: number, ships: CoordinateShips, indexPlayer: number): void {
+  public createGame(
+    gameId: number,
+    ships: Record <string, CoordinateShips>,
+    indexPlayer: number,
+  ): void {
     const finededGame: Game | undefined = this.db.games.find(
       (game) => game.gameId === gameId,
     );
@@ -47,7 +52,11 @@ class GameDatabase {
     this.db.gamesMessage.push(newMessageGame);
   }
 
-  private firstGame(gameId: number, ships: CoordinateShips, indexPlayer: number): void {
+  private firstGame(
+    gameId: number,
+    ships: Record <string, CoordinateShips>,
+    indexPlayer: number,
+  ): void {
     const newGame: Game = {
       gameId,
       players: [{ indexPlayer, ships }],
@@ -62,6 +71,53 @@ class GameDatabase {
       return game.currentPlayer;
     }
     return 0;
+  }
+
+  public attack(gameData: Attack) {
+    const game: Game | undefined = this.db.games.find((g) => g.gameId === gameData.gameId);
+    if (game) {
+      const enemy = game.players.find((p) => p.indexPlayer !== gameData.indexPlayer) as PlayerGame;
+      const ship: number | undefined = this.checkCoordinate(
+        enemy.ships,
+        { x: gameData.x, y: gameData.y },
+      );
+
+      if (ship) {
+        this.moveGoalCoordinates(enemy.ships, ship, gameData);
+      }
+    }
+  }
+
+  private checkCoordinate(
+    coordinateShip: Record <string, CoordinateShips>,
+    attackCoordinate: CoordinateAttack,
+  ): number | undefined {
+    let findedShip;
+    for (const [key, coordinates] of Object.entries(coordinateShip)) {
+      if (coordinates.closePosition.x.includes(attackCoordinate.x)
+      && coordinates.closePosition.y.includes(attackCoordinate.y)) {
+        findedShip = +key;
+      }
+    }
+    return findedShip;
+  }
+
+  private moveGoalCoordinates(
+    ships:Record<string, CoordinateShips>,
+    ship: number,
+    { x, y }: Attack,
+  ) {
+    const { x: fromAxisX, y: fromAxisY } = ships[ship].closePosition;
+    const { x: toAxisX, y: toAxisY } = ships[ship].openPosition;
+    const moveXCoordinate = fromAxisX.splice(fromAxisX.indexOf(x), 1);
+    const moveYCoordinate = fromAxisY.splice(fromAxisY.indexOf(y), 1);
+    toAxisX.push(...moveXCoordinate);
+    toAxisY.push(...moveYCoordinate);
+    for (const iterator of this.db.games) {
+      for (const iterator2 of iterator.players) {
+        console.table(iterator2.ships[ship]);
+      }
+    }
   }
 }
 

@@ -1,4 +1,3 @@
-import { ResponseMessage } from '../../../../libraries/models/interfaces/response-message.interface';
 import { CoordinateShips } from './coordinate-ship.interface';
 import { Ships } from './ships-data.interface';
 
@@ -13,9 +12,9 @@ export interface Game {
   currentPlayer: number
 }
 
-interface PlayerGame {
+export interface PlayerGame {
   indexPlayer: number;
-  ships: CoordinateShips;
+  ships: Record <string, CoordinateShips>;
 }
 
 export interface GameMessage {

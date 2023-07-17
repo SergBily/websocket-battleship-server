@@ -1,9 +1,14 @@
 export interface CoordinateShips {
-  openPosition: Coordinates[];
-  closePosition: Coordinates[];
+  openPosition: Coordinates;
+  closePosition: Coordinates;
 }
 
-interface Coordinates {
+export interface Coordinates {
   x: number[];
   y: number[];
+}
+
+export interface CoordinateAttack {
+  x: number;
+  y: number;
 }

@@ -8,4 +8,5 @@ export const typeOfMessage: TypesMessages = {
   create_room: roomController.create,
   add_user_to_room: roomController.addToRoom,
   add_ships: gameController.addShips,
+  attack: gameController.attack,
 };

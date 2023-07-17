@@ -14,35 +14,26 @@ const fillPositions = (ship: Ships, type: string, axis: string): number[] => {
 export const createPositionsShip = (ships: Ships[]): Record <string, CoordinateShips> => {
   const filledPositionsShips: Record <string, CoordinateShips> = {
     0: {
-      openPosition: [],
-      closePosition: [],
+      openPosition: { x: [], y: [] },
+      closePosition: { x: [], y: [] },
     },
   };
-  // for (const ship of ships) {
-  //   if (ship.direction) {
-  //     const y = fillPositions(ship, 'add', 'y');
-  //     const x = fillPositions(ship, '', 'x');
-  //     filledPositionsShips.closePosition.push({ x, y });
-  //   } else {
-  //     const y = fillPositions(ship, '', 'y');
-  //     const x = fillPositions(ship, 'add', 'x');
-  //     filledPositionsShips.closePosition.push({ x, y });
-  //   }
-  // }
 
   for (const [index, ship] of ships.entries()) {
     if (ship.direction) {
       const y = fillPositions(ship, 'add', 'y');
       const x = fillPositions(ship, '', 'x');
-      const bb: CoordinateShips | undefined = filledPositionsShips[index];
-      // eslint-disable-next-line @typescript-eslint/dot-notation
-      bb['closePosition'].push({ x, y });
+      filledPositionsShips[index] = {
+        closePosition: { x, y },
+        openPosition: { x: [], y: [] },
+      };
     } else {
       const y = fillPositions(ship, '', 'y');
       const x = fillPositions(ship, 'add', 'x');
-      const bb: CoordinateShips | undefined = filledPositionsShips[index];
-      // eslint-disable-next-line @typescript-eslint/dot-notation
-      bb['closePosition'].push({ x, y });
+      filledPositionsShips[index] = {
+        closePosition: { x, y },
+        openPosition: { x: [], y: [] },
+      };
     }
   }
   return filledPositionsShips;

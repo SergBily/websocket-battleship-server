@@ -1,6 +1,7 @@
 export interface ShipsData {
   gameId: number;
   ships: Ships[];
+  indexPlayer: number;
 }
 
 export interface Ships {

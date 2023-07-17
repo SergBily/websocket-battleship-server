@@ -4,6 +4,7 @@ import { TypeMessages } from '../../../libraries/models/enums/type-messages.enum
 import { jsonConverter } from '../../../libraries/utils/json-converter';
 import { printMessage } from '../../../libraries/utils/print-message';
 import { gameService } from '../domain/game-service';
+import { Attack } from '../domain/interfaces/attack.interface';
 import { Players } from '../domain/interfaces/game-database.interface';
 import { ShipsData } from '../domain/interfaces/ships-data.interface';
 
@@ -26,6 +27,11 @@ class GameController {
         printMessage(messageTurn);
       }
     }
+  }
+
+  public async attack(data: string, idClient: number): Promise<void> {
+    const gameData: Attack = jsonConverter(data);
+    const bb = await gameService.attack(gameData);
   }
 }
 
