@@ -3,6 +3,8 @@ import { createPositionsShip } from './create-positions-ship';
 import { Attack } from './interfaces/attack.interface';
 import { CoordinateShips } from './interfaces/coordinate-ship.interface';
 import { Players } from './interfaces/game-database.interface';
+import { ResponseAttack } from './interfaces/response-attack.interface';
+import { ResponseCurrentPlayer } from './interfaces/response-current-player.interface';
 import { ShipsData } from './interfaces/ships-data.interface';
 
 class GameService {
@@ -17,8 +19,32 @@ class GameService {
     return gameDatabase.getCurrentPlayerGame(gameId);
   }
 
-  public async attack(gameData: Attack) {
-    const bb = gameDatabase.attack(gameData);
+  public async updateCurrentPlayerGame(gameId: number, currentPlayer: number): Promise<void> {
+    gameDatabase.updateCurrentPlayerGame(gameId, currentPlayer);
+  }
+
+  public async attack(gameData: Attack): Promise<ResponseAttack> {
+    const playersGame = gameDatabase.getPlayersGame(gameData.gameId);
+    const status = gameDatabase.attack(gameData);
+    return { playersGame, status };
+  }
+
+  public async changeCurrentGame(
+    responseAttack: ResponseAttack,
+    gameId: number,
+  ): Promise<ResponseCurrentPlayer> {
+    const currentPlayer = await this.getPlayerGoes(gameId);
+    const dataTurn = {
+      currentPlayer,
+    };
+
+    if (responseAttack.status === 'miss') {
+      dataTurn.currentPlayer = responseAttack.playersGame?.find(
+        (player) => player.indexPlayer !== currentPlayer,
+      )?.indexPlayer as number;
+      this.updateCurrentPlayerGame(gameId, dataTurn.currentPlayer);
+    }
+    return dataTurn;
   }
 }
 

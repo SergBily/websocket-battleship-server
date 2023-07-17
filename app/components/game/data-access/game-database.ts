@@ -1,12 +1,12 @@
 import { Attack } from '../domain/interfaces/attack.interface';
-import { CoordinateAttack, CoordinateShips, Coordinates } from '../domain/interfaces/coordinate-ship.interface';
+import { CoordinateAttack, CoordinateShips } from '../domain/interfaces/coordinate-ship.interface';
 import {
   GameDatabase as Database, Game, GameMessage, PlayerGame, Players,
 } from '../domain/interfaces/game-database.interface';
 import { ShipsData } from '../domain/interfaces/ships-data.interface';
 
 class GameDatabase {
-  db: Database = {
+  private db: Database = {
     games: [],
     gamesMessage: [],
   };
@@ -73,8 +73,24 @@ class GameDatabase {
     return 0;
   }
 
+  public updateCurrentPlayerGame(gameId: number, currentPlayer: number): void {
+    const game: Game | undefined = this.db.games.find((g) => g.gameId === gameId);
+    if (game) {
+      game.currentPlayer = currentPlayer;
+    }
+  }
+
+  public getPlayersGame(gameId: number): PlayerGame[] | undefined {
+    const game: Game | undefined = this.db.games.find((g) => g.gameId === gameId);
+    if (game) {
+      return game.players;
+    }
+    return undefined;
+  }
+
   public attack(gameData: Attack) {
     const game: Game | undefined = this.db.games.find((g) => g.gameId === gameData.gameId);
+    let status = 'miss';
     if (game) {
       const enemy = game.players.find((p) => p.indexPlayer !== gameData.indexPlayer) as PlayerGame;
       const ship: number | undefined = this.checkCoordinate(
@@ -83,9 +99,10 @@ class GameDatabase {
       );
 
       if (ship) {
-        this.moveGoalCoordinates(enemy.ships, ship, gameData);
+        status = this.moveGoalCoordinates(enemy.ships, ship, gameData);
       }
     }
+    return status;
   }
 
   private checkCoordinate(
@@ -106,18 +123,14 @@ class GameDatabase {
     ships:Record<string, CoordinateShips>,
     ship: number,
     { x, y }: Attack,
-  ) {
+  ): string {
     const { x: fromAxisX, y: fromAxisY } = ships[ship].closePosition;
     const { x: toAxisX, y: toAxisY } = ships[ship].openPosition;
     const moveXCoordinate = fromAxisX.splice(fromAxisX.indexOf(x), 1);
     const moveYCoordinate = fromAxisY.splice(fromAxisY.indexOf(y), 1);
     toAxisX.push(...moveXCoordinate);
     toAxisY.push(...moveYCoordinate);
-    for (const iterator of this.db.games) {
-      for (const iterator2 of iterator.players) {
-        console.table(iterator2.ships[ship]);
-      }
-    }
+    return fromAxisX.length === 0 && fromAxisY.length === 0 ? 'killed' : 'shot';
   }
 }
 
