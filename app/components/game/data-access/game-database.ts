@@ -98,7 +98,7 @@ class GameDatabase {
         { x: gameData.x, y: gameData.y },
       );
 
-      if (ship) {
+      if (ship || ship === 0) {
         status = this.moveGoalCoordinates(enemy.ships, ship, gameData);
       }
     }
