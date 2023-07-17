@@ -8,11 +8,12 @@ import { User } from '../domain/interfaces/user.interface';
 import { UserDto } from '../domain/dtos/user-dto';
 import { ResponseRegData } from '../domain/interfaces/response-reg.interface';
 import { clients } from '../../../libraries/common/clients';
+import { messagesGenerator } from '../../../libraries/common/messages-generator';
 
 class UserController {
   async login(payload: string, idClient: number) {
     const decodedPayload: User = jsonConverter(payload);
-    const { user, roomsMessage } = await userService.login(decodedPayload, idClient);
+    const { user, roomsMessage, winners } = await userService.login(decodedPayload, idClient);
     const userDto: ResponseRegData = new UserDto(user);
     const messageClient: StructureMessage = createSendMessage(
       TypeMessages.reg,
@@ -24,6 +25,14 @@ class UserController {
     const currentClient = clients[`${idClient}`];
     currentClient.send(decodedMessage);
     currentClient.send(roomsMessage);
+    const messageWin: string = messagesGenerator.generateMessage(
+      winners,
+      TypeMessages.update_winners,
+    );
+    for (const client of Object.values(clients)) {
+      client.send(messageWin);
+      printMessage(messageWin);
+    }
   }
 }
 

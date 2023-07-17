@@ -13,7 +13,11 @@ class UserService {
       allRoomWithOnePlayer,
       TypeMessages.update_room,
     );
-    return { user: userDatabase.getUser(index) as UserDatabase, roomsMessage };
+    return {
+      user: userDatabase.getUser(index) as UserDatabase,
+      roomsMessage,
+      winners: userDatabase.getWinners(),
+    };
   }
 }
 
