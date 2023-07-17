@@ -44,6 +44,13 @@ class RoomDatabase {
     }
     return updatedRoom;
   }
+
+  public deleteRoom(roomId: number): void {
+   const room: Room | undefined =  this.db.rooms.find(room => room.roomId === roomId);
+   if (room) {
+    this.db.rooms.splice(this.db.rooms.indexOf(room), 1)
+   }
+  }
 }
 
 export const roomDatabase = new RoomDatabase();

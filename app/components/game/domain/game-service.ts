@@ -5,7 +5,7 @@ import { gameDatabase } from '../data-access/game-database';
 import { createPositionsShip } from './create-positions-ship';
 import { Attack } from './interfaces/attack.interface';
 import { CoordinateShips } from './interfaces/coordinate-ship.interface';
-import { Players } from './interfaces/game-database.interface';
+import { PlayerGame, Players } from './interfaces/game-database.interface';
 import { ResponseAttack } from './interfaces/response-attack.interface';
 import { ResponseCurrentPlayer } from './interfaces/response-current-player.interface';
 import { ShipsData } from './interfaces/ships-data.interface';
@@ -27,8 +27,8 @@ class GameService {
   }
 
   public async attack(gameData: Attack): Promise<ResponseAttack> {
-    const playersGame = gameDatabase.getPlayersGame(gameData.gameId);
-    const status = gameDatabase.attack(gameData);
+    const playersGame: PlayerGame[] | undefined = gameDatabase.getPlayersGame(gameData.gameId);
+    const status: string | undefined = gameDatabase.attack(gameData);
     let winners!: Winners[];
     if (status === 'win') {
       const user = userDatabase.getUser(gameData.indexPlayer) as UserDatabase;

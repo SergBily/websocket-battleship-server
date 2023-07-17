@@ -88,7 +88,7 @@ class GameDatabase {
     return undefined;
   }
 
-  public attack(gameData: Attack) {
+  public attack(gameData: Attack): string {
     const game: Game | undefined = this.db.games.find((g) => g.gameId === gameData.gameId);
     let status = 'miss';
     if (game) {

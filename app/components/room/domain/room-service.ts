@@ -13,6 +13,8 @@ class RoomService {
 
     if (user) {
       const hasRoomUser: boolean = roomDatabase.hasRoomWitsPlayer(user.name);
+      console.log(hasRoomUser);
+      
       if (!hasRoomUser) {
         const roomId: number = roomDatabase.getCountRooms();
         const createdRoom: Room = dataService.createRoomData(roomId, user);
@@ -30,6 +32,7 @@ class RoomService {
         roomId,
         { name: user.name, index: user.index },
       );
+      roomDatabase.deleteRoom(roomId);
       return currentRoom as Room;
     }
     return undefined;
