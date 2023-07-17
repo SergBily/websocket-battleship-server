@@ -61,13 +61,22 @@ class GameController {
         clients[player.indexPlayer].send(messageTurn);
         printMessage(messageAttack);
         printMessage(messageTurn);
+
         if (responseAttack.status === 'win') {
-          const messageWin: string = messagesGenerator.generateMessage(
+          const messageFinnish: string = messagesGenerator.generateMessage(
             { winPlayer: gameData.indexPlayer },
             TypeMessages.finish,
           );
-          clients[player.indexPlayer].send(messageWin);
-          printMessage(messageWin);
+          const messageWin: string = messagesGenerator.generateMessage(
+            responseAttack.winners,
+            TypeMessages.update_winners,
+          );
+          clients[player.indexPlayer].send(messageFinnish);
+          printMessage(messageFinnish);
+          for (const client of Object.values(clients)) {
+            client.send(messageWin);
+            printMessage(messageWin);
+          }
         }
       }
     }

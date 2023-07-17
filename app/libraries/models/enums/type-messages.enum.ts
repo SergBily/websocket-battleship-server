@@ -9,4 +9,5 @@ export enum TypeMessages {
   turn = 'turn',
   attack = 'attack',
   finish = 'finish',
+  update_winners = 'update_winners',
 }

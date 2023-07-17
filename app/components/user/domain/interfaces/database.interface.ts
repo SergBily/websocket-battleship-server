@@ -1,5 +1,7 @@
 import { UserDatabase } from './user.interface';
+import { Winners } from './winners.interface';
 
 export interface Database {
-  reg: UserDatabase[]
+  reg: UserDatabase[];
+  winners: Winners[];
 }

@@ -1,3 +1,6 @@
+import { userDatabase } from '../../user/data-access/user-database';
+import { UserDatabase } from '../../user/domain/interfaces/user.interface';
+import { Winners } from '../../user/domain/interfaces/winners.interface';
 import { gameDatabase } from '../data-access/game-database';
 import { createPositionsShip } from './create-positions-ship';
 import { Attack } from './interfaces/attack.interface';
@@ -26,7 +29,13 @@ class GameService {
   public async attack(gameData: Attack): Promise<ResponseAttack> {
     const playersGame = gameDatabase.getPlayersGame(gameData.gameId);
     const status = gameDatabase.attack(gameData);
-    return { playersGame, status };
+    let winners!: Winners[];
+    if (status === 'win') {
+      const user = userDatabase.getUser(gameData.indexPlayer) as UserDatabase;
+      userDatabase.updateWinners(user?.name);
+      winners = userDatabase.getWinners();
+    }
+    return { playersGame, status, winners };
   }
 
   public async changeCurrentGame(
