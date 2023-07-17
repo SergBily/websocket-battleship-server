@@ -40,9 +40,9 @@ class RoomService {
     return messagesGenerator.generateMessage(allRoomWithOnePlayer, TypeMessages.update_room);
   }
 
-  public async getcreateGameMessages(idGame: number): Promise<string> {
+  public getcreateGameMessages(idGame: number, idPlayer: number): string {
     return messagesGenerator.generateMessage<ResponseDataMessage>(
-      { idGame },
+      { idGame, idPlayer },
       TypeMessages.create_game,
     );
   }

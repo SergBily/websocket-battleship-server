@@ -1,3 +1,4 @@
+import { clients } from '../../../libraries/common/clients';
 import { jsonConverter } from '../../../libraries/utils/json-converter';
 import { printMessage } from '../../../libraries/utils/print-message';
 import { RequestAddRoom } from '../domain/interfaces/request-add-room.interface';
@@ -21,10 +22,15 @@ class RoomController {
     );
     if (roomForGame) {
       const messageUpdateRooms: string = await roomService.getUpdateRoomsMessages();
-      const messageCreateGame: string = await roomService.getcreateGameMessages(idClient);
       sendMessagePlayers(messageUpdateRooms);
-      sendMessageGamePlayers(messageCreateGame, roomForGame.roomUsers);
-      printMessage(messageCreateGame);
+      for (const user of roomForGame.roomUsers) {
+        const messageCreateGame: string = roomService.getcreateGameMessages(
+          idClient,
+          user.index,
+        );
+        clients[user.index].send(messageCreateGame);
+        printMessage(messageCreateGame);
+      }
     }
   }
 }
