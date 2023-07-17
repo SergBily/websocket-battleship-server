@@ -34,6 +34,10 @@ class UserDatabase {
   public getWinners(): Winners[] {
     return this.db.winners;
   }
+
+  public hasUser(name: string): boolean {
+    return this.db.reg.some((user) => user.name === name);
+  }
 }
 
 export const userDatabase = new UserDatabase();

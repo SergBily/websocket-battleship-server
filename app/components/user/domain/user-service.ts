@@ -6,7 +6,7 @@ import { ResponseLogin } from './interfaces/response-login.interface';
 import { User, UserDatabase } from './interfaces/user.interface';
 
 class UserService {
-  async login(userData: User, index: number): Promise<ResponseLogin> {
+  public async login(userData: User, index: number): Promise<ResponseLogin> {
     userDatabase.createUser({ index, ...userData });
     const allRoomWithOnePlayer = roomDatabase.getRoomsWithOnePlayer();
     const roomsMessage = messagesGenerator.generateMessage(
@@ -18,6 +18,10 @@ class UserService {
       roomsMessage,
       winners: userDatabase.getWinners(),
     };
+  }
+
+  public async checkUser(name: string): Promise<boolean> {
+    return userDatabase.hasUser(name);
   }
 }
 

@@ -13,6 +13,8 @@ import { messagesGenerator } from '../../../libraries/common/messages-generator'
 class UserController {
   async login(payload: string, idClient: number) {
     const decodedPayload: User = jsonConverter(payload);
+    const isUser = await userService.checkUser(decodedPayload.name);
+    if (isUser) return;
     const { user, roomsMessage, winners } = await userService.login(decodedPayload, idClient);
     const userDto: ResponseRegData = new UserDto(user);
     const messageClient: StructureMessage = createSendMessage(
