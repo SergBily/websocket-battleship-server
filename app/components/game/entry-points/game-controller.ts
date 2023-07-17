@@ -61,6 +61,14 @@ class GameController {
         clients[player.indexPlayer].send(messageTurn);
         printMessage(messageAttack);
         printMessage(messageTurn);
+        if (responseAttack.status === 'win') {
+          const messageWin: string = messagesGenerator.generateMessage(
+            { winPlayer: gameData.indexPlayer },
+            TypeMessages.finish,
+          );
+          clients[player.indexPlayer].send(messageWin);
+          printMessage(messageWin);
+        }
       }
     }
   }

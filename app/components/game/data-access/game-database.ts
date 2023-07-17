@@ -130,7 +130,19 @@ class GameDatabase {
     const moveYCoordinate = fromAxisY.splice(fromAxisY.indexOf(y), 1);
     toAxisX.push(...moveXCoordinate);
     toAxisY.push(...moveYCoordinate);
+    const isWin = this.checkWinner(ships);
+    if (isWin) {
+      return 'win';
+    }
     return fromAxisX.length === 0 && fromAxisY.length === 0 ? 'killed' : 'shot';
+  }
+
+  private checkWinner(ships: Record<string, CoordinateShips>): string {
+    let killedShips = 0;
+    for (const ship of Object.values(ships)) {
+      killedShips += +(ship.closePosition.x.length === 0 && ship.closePosition.y.length === 0);
+    }
+    return killedShips === 10 ? 'win' : '';
   }
 }
 
