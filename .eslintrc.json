@@ -1,0 +1,26 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:unicorn/recommended",
+        "airbnb",
+        "airbnb-typescript"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "rules": {
+        "import/prefer-default-export": "off",
+        "no-unused-expressions": "off",
+        "class-methods-use-this": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-underscore-dangle": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "no-restricted-syntax": "off"
+    },
+    "ignorePatterns": ["webpack.config.js"]
+}
